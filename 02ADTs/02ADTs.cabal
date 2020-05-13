@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: de7373e64b9a66edd61e12a8a1ae66c26244c53aa07956d3673c4dd53626be71
+-- hash: 34cba25cbc4909fd071d555b28df21a1da186e49838ea248bd782366bb0b10a8
 
 name:           02ADTs
 version:        0.1.0.0
@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Log
   other-modules:
       Paths_02ADTs
   hs-source-dirs:

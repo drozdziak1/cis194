@@ -19,14 +19,58 @@ fun2 n
   | otherwise = fun2 (3 * n + 1)
 
 fun2' :: Integer -> Integer
-fun2' xs =
+fun2' n =
   sum $
-  takeWhile (> 0) $
+  filter even $
+  takeWhile (/= 1) $
   iterate
     (\x ->
-       if x == 1
-         then 0
-         else if even x
-                then x `div` 2
-                else 3 * x + 1)
-    xs
+       if even x
+         then x `div` 2
+         else 3 * x + 1)
+    n
+
+insertBalanced :: Tree a -> a -> Tree a
+insertBalanced Leaf x = Node 0 Leaf x Leaf
+insertBalanced (Node height left val right ) x =
+      let newLeft = insertBalanced left x
+          newRight = insertBalanced right x
+       in case (tHeight left, tHeight right) of
+               (lheight , rheight) | lheight > rheight ->
+                Node (rheight + 1) left val newRight
+               (lheight, rheight) ->
+                 Node (lheight + 1) newLeft val right
+
+-- tree height getter
+tHeight :: Tree a -> Integer
+tHeight Leaf = 0
+tHeight (Node n _ _ _) = n
+
+foldTree :: [a] -> Tree a
+foldTree = foldr (flip insertBalanced) Leaf
+
+data Tree a
+  = Leaf
+  | Node Integer (Tree a) a (Tree a)
+  deriving (Show, Eq)
+
+
+-- True if there's an odd number of True's in input
+xor :: [Bool] -> Bool
+xor = foldr (/=) False . filter id
+
+-- fold-based map
+map' :: (a -> b) -> [a] -> [b]
+map' f = foldr (\x acc -> f x : acc) []
+
+-- foldr-based foldl. The task mentions a -> b -> a but I think that's not
+-- right.
+myFoldl :: (a -> b -> a) -> a -> [b] -> a
+myFoldl f z xs = foldr (flip f) z $ reverse xs
+
+-- Sieve of Sundaram implementation
+sieveSundaram :: Integer -> [Integer]
+sieveSundaram  = undefined
+
+cartProd :: [a] -> [b] -> [(a, b)]
+cartProd xs ys = [(x, y) | x <- xs, y <- ys]
